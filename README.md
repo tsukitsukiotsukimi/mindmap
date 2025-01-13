@@ -1,6 +1,6 @@
 # MindMap Editor
 
-**MindMap Editor** is a desktop application that allows users to create, edit, save, and visualize mind maps intuitively. It leverages a tree-like structure to organize relationships between nodes and supports flexible editing operations.
+**MindMap Editor** is a windows application that allows users to create, edit, save, and visualize mind maps intuitively. It leverages a tree-like structure to organize relationships between nodes and supports flexible editing operations. You can upload saved mindmap file to LLM model to disscuss.
 
 ---
 
