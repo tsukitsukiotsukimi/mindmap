@@ -20,6 +20,15 @@ class Toolbar(tk.Frame):
         add_subnode_button.pack(side="left", padx=5, pady=5)
         delete_node_button = tk.Button(self, text="Delete", command=self.delete_selected_node, bg="#3b3b3b", fg="#ffffff")
         delete_node_button.pack(side="left", padx=5, pady=5)
+
+        layout_button = tk.Button(
+            self,
+            text="Auto Layout",
+            command=self.auto_layout_action,
+            bg="#3b3b3b",
+            fg="#ffffff",
+        )
+        layout_button.pack(side="left", padx=5, pady=5)
     def delete_selected_node(self):
         """
         選択されたノードとその子孫ノードを削除
@@ -46,4 +55,8 @@ class Toolbar(tk.Frame):
             self.canvas.mindmap.add_node("Subnode", parent_id=selected_node.id)
             self.canvas.draw()  # 再描画
 
+    def auto_layout_action(self):
+        """Automatically arrange node positions."""
+        self.canvas.mindmap.apply_force_layout()
+        self.canvas.draw()
 

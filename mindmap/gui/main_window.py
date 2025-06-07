@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from gui.canvas import Canvas
 from gui.toolbar import Toolbar
@@ -9,7 +8,7 @@ class MainWindow:
         self.root = tk.Tk()
         self.root.title("MindMap Editor")
         self.root.geometry("800x600")
-        self.root.configure(bg="#1e1e1e")  # ウィンドウ全体の背景色を変更
+        self.root.configure(bg="#1e1e1e")  # dark background
 
         self.mindmap = MindMap()
         self.canvas = Canvas(self.root, self.mindmap)
@@ -18,4 +17,6 @@ class MainWindow:
         self.toolbar = Toolbar(self.root, self.canvas)
         self.toolbar.pack(side=tk.TOP, fill=tk.X)
 
+    def run(self):
+        """Start the Tkinter main loop."""
         self.root.mainloop()

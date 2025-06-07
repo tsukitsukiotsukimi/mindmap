@@ -2,22 +2,22 @@ class CanvasRenderer:
     def __init__(self, canvas):
         self.canvas = canvas
 
-    def draw_node(self, node):
-        """
-        ノードを描画する (入力文字数に応じてサイズを動的に調整)
-        """
+    def draw_node(self, node, selected=False):
+        """Draw a node and optionally highlight it if selected."""
         x, y = node.position
-        base_height = 20  # テキスト行ごとの基本高さ
         padding_x = 20    # 横方向の余白
         padding_y = 10    # 縦方向の余白
 
-        # テキストの幅を計算
-        text_width = self.canvas.bbox(
-            self.canvas.create_text(0, 0, text=node.text, font=("Arial", 12, "bold"))
-        )[2]
-        # 幅と高さを計算
-        width = text_width + padding_x * 2  # テキスト幅 + 横余白
-        height = base_height + padding_y * 2  # テキスト高さ + 縦余白
+        # テキストサイズを計算
+        temp_id = self.canvas.create_text(0, 0, text=node.text, font=("Arial", 12, "bold"))
+        bbox = self.canvas.bbox(temp_id)
+        self.canvas.delete(temp_id)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+
+        # ノードのサイズを計算
+        width = text_width + padding_x * 2
+        height = text_height + padding_y * 2
 
         # 四角形の頂点座標を計算
         x0, y0 = x - width / 2, y - height / 2
@@ -25,6 +25,16 @@ class CanvasRenderer:
 
         # ノードの背景 (青色)
         radius = 10  # 角の丸み
+        if selected:
+            self.canvas.create_rectangle(
+                x0 - 4,
+                y0 - 4,
+                x1 + 4,
+                y1 + 4,
+                outline="#ffeb3b",
+                width=2,
+                tags=f"highlight_{node.id}",
+            )
         self.canvas.create_rectangle(
             x0 + radius, y0, x1 - radius, y1, fill="#2d89ef", outline="", tags=f"node_bg_{node.id}"
         )
@@ -66,4 +76,3 @@ class CanvasRenderer:
             nx, ny = node.position
             if (x - nx) ** 2 + (y - ny) ** 2 <= 20 ** 2:
                 return node
-        return None
