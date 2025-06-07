@@ -58,6 +58,9 @@ class CanvasRenderer:
         self.canvas.create_text(
             x, y, text=node.text, fill="#ffffff", font=("Arial", 12, "bold"), tags=f"text_{node.id}"
         )
+
+        # store bounding box for hit detection
+        node.bbox = (x0, y0, x1, y1)
         
     def draw_link(self, parent, child):
         """
@@ -73,6 +76,8 @@ class CanvasRenderer:
 
     def get_node_at(self, x, y):
         for node in self.canvas.mindmap.nodes.values():
-            nx, ny = node.position
-            if (x - nx) ** 2 + (y - ny) ** 2 <= 20 ** 2:
+            if node.bbox is None:
+                continue
+            x0, y0, x1, y1 = node.bbox
+            if x0 <= x <= x1 and y0 <= y <= y1:
                 return node

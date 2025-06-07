@@ -145,4 +145,5 @@ class Node:
         self.text = text
         self.position = np.array(position, dtype=float)  # numpy配列に変更
         self.children = []
+        self.bbox = None  # Node bounding box for hit detection
 
