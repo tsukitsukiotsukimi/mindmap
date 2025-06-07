@@ -31,3 +31,10 @@ Requires Python 3.8 or later.
 ```bash
 git clone https://github.com/tsukitsukiotsukimi/mindmap.git
 cd mindmap
+``` 
+
+### Run
+```bash
+python3 -m pip install -r requirements.txt  # if requirements exist
+python3 mindmap/main.py
+```

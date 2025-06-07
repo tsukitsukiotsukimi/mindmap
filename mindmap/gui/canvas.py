@@ -15,12 +15,18 @@ class Canvas(tk.Canvas):
         self.text_editor = None  # テキスト編集用エントリ
         self.scale_factor = 1.0
 
+        # 右クリック用メニュー
+        self.menu = tk.Menu(self, tearoff=0)
+        self.menu.add_command(label="Add Child", command=self.menu_add_child)
+        self.menu.add_command(label="Delete Node", command=self.menu_delete_node)
+
         # イベントバインディング
         self.bind("<Button-1>", self.on_click)           # ノード選択
         self.bind("<B1-Motion>", self.on_drag)          # ドラッグ中
         self.bind("<ButtonRelease-1>", self.on_release) # ドラッグ終了
         self.bind("<MouseWheel>", self.on_zoom)         # ズーム
         self.bind("<Double-1>", self.on_double_click)   # ダブルクリックで文字列編集
+        self.bind("<Button-3>", self.on_right_click)    # 右クリックメニュー
     
     def save_mindmap(self):
         """
@@ -52,7 +58,7 @@ class Canvas(tk.Canvas):
         for parent, child in self.mindmap.get_links():
             self.renderer.draw_link(parent, child)
         for node in self.mindmap.nodes.values():
-            self.renderer.draw_node(node)
+            self.renderer.draw_node(node, selected=(node == self.selected_node))
 
     def on_zoom(self, event):
         """
@@ -165,3 +171,24 @@ class Canvas(tk.Canvas):
         else:
             self.selected_node = None  # 何も選択されていない場合リセット
 
+    def on_right_click(self, event):
+        """Show context menu when right-clicking on a node."""
+        node = self.renderer.get_node_at(event.x, event.y)
+        if node:
+            self.selected_node = node
+            self.menu.tk_popup(event.x_root, event.y_root)
+        else:
+            self.selected_node = None
+
+    def menu_add_child(self):
+        """Context menu action to add a child node."""
+        if self.selected_node:
+            self.mindmap.add_node("Subnode", parent_id=self.selected_node.id)
+            self.draw()
+
+    def menu_delete_node(self):
+        """Context menu action to delete the selected node."""
+        if self.selected_node:
+            self.mindmap.delete_node_and_descendants(self.selected_node.id)
+            self.selected_node = None
+            self.draw()

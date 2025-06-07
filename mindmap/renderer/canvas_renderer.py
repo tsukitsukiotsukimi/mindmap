@@ -2,10 +2,8 @@ class CanvasRenderer:
     def __init__(self, canvas):
         self.canvas = canvas
 
-    def draw_node(self, node):
-        """
-        ノードを描画する (入力文字数に応じてサイズを動的に調整)
-        """
+    def draw_node(self, node, selected=False):
+        """Draw a node and optionally highlight it if selected."""
         x, y = node.position
         base_height = 20  # テキスト行ごとの基本高さ
         padding_x = 20    # 横方向の余白
@@ -25,6 +23,16 @@ class CanvasRenderer:
 
         # ノードの背景 (青色)
         radius = 10  # 角の丸み
+        if selected:
+            self.canvas.create_rectangle(
+                x0 - 4,
+                y0 - 4,
+                x1 + 4,
+                y1 + 4,
+                outline="#ffeb3b",
+                width=2,
+                tags=f"highlight_{node.id}",
+            )
         self.canvas.create_rectangle(
             x0 + radius, y0, x1 - radius, y1, fill="#2d89ef", outline="", tags=f"node_bg_{node.id}"
         )
@@ -66,4 +74,3 @@ class CanvasRenderer:
             nx, ny = node.position
             if (x - nx) ** 2 + (y - ny) ** 2 <= 20 ** 2:
                 return node
-        return None
