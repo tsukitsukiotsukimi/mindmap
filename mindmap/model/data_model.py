@@ -146,4 +146,3 @@ class Node:
         self.position = np.array(position, dtype=float)  # numpy配列に変更
         self.children = []
 
-
